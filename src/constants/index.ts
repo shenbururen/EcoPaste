@@ -37,9 +37,9 @@ export const LISTEN_KEY = {
 };
 
 export const PRESET_SHORTCUT = {
-  FAVORITE: isMac ? "meta.d" : "ctrl.d",
-  FIXED_WINDOW: isMac ? "meta.p" : "ctrl.p",
-  HIDE_WINDOW: isMac ? "meta.w" : "ctrl.w",
-  OPEN_PREFERENCES: isMac ? "meta.comma" : "ctrl.comma",
-  SEARCH: isMac ? "meta.f" : "ctrl.f",
+  FAVORITE: isMac() ? "meta.d" : "ctrl.d",
+  FIXED_WINDOW: isMac() ? "meta.p" : "ctrl.p",
+  HIDE_WINDOW: isMac() ? "meta.w" : "ctrl.w",
+  OPEN_PREFERENCES: isMac() ? "meta.comma" : "ctrl.comma",
+  SEARCH: isMac() ? "meta.f" : "ctrl.f",
 };

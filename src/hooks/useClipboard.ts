@@ -84,9 +84,7 @@ export const useClipboard = (
 
       if (matched) {
         if (!clipboardStore.content.autoSort) return;
-
         const { id } = matched;
-
         if (visible) {
           remove(state.list, { id });
 

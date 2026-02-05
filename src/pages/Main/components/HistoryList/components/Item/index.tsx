@@ -87,6 +87,11 @@ const Item: FC<ItemProps> = (props) => {
   };
 
   const renderContent = () => {
+    if (content.showOnlyPlainText) {
+      // 只展示纯文本内容
+      return <Text {...data} subtype="plain" type="text" />;
+    }
+
     switch (type) {
       case "text":
         return <Text {...data} />;
@@ -104,7 +109,7 @@ const Item: FC<ItemProps> = (props) => {
   return (
     <Flex
       className={clsx(
-        "group b hover:b-primary-5 b-color-2 mx-3 max-h-30 rounded-md p-1.5 transition",
+        "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-1.5 transition",
         {
           "b-primary bg-primary-1": rootState.activeId === id,
         },
@@ -115,9 +120,11 @@ const Item: FC<ItemProps> = (props) => {
       onDoubleClick={() => handleClick("double")}
       vertical
     >
-      <Header {...rest} data={data} handleNote={handleNote} />
+      {!content.hideHeaders && (
+        <Header {...rest} data={data} handleNote={handleNote} />
+      )}
 
-      <div className="relative flex-1 select-auto overflow-hidden break-words children:transition">
+      <div className="relative flex-1 select-auto overflow-visible break-words children:transition">
         <div
           className={clsx(
             "pointer-events-none absolute inset-0 line-clamp-4 children:inline opacity-0",

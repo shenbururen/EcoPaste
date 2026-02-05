@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { useSnapshot } from "valtio";
 import ProList from "@/components/ProList";
@@ -12,6 +13,7 @@ import WindowPosition from "./components/WindowPosition";
 const ClipboardSettings = () => {
   const { window, search, content } = useSnapshot(clipboardStore);
   const { t } = useTranslation();
+  const plainTextLinesId = useId();
 
   return (
     <>
@@ -142,6 +144,50 @@ const ClipboardSettings = () => {
           )}
           value={content.showOriginalContent}
         />
+
+        <ProSwitch
+          description={t(
+            "preference.clipboard.content_settings.hints.show_only_plain_text",
+          )}
+          onChange={(value) => {
+            clipboardStore.content.showOnlyPlainText = value;
+          }}
+          title={t(
+            "preference.clipboard.content_settings.label.show_only_plain_text",
+          )}
+          value={content.showOnlyPlainText}
+        />
+
+        <ProSwitch
+          description={t(
+            "preference.clipboard.content_settings.hints.hide_headers",
+          )}
+          onChange={(value) => {
+            clipboardStore.content.hideHeaders = value;
+          }}
+          title={t("preference.clipboard.content_settings.label.hide_headers")}
+          value={content.hideHeaders}
+        />
+
+        <div className="mt-2 mb-2">
+          <label className="mb-1 block text-color-2" htmlFor={plainTextLinesId}>
+            {t("preference.clipboard.content_settings.label.plain_text_lines")}
+          </label>
+          <input
+            className="w-full rounded-md bg-color-1 p-2 text-color-1"
+            id={plainTextLinesId}
+            max="10"
+            min="1"
+            onChange={(e) => {
+              clipboardStore.content.plainTextLines = parseInt(
+                e.target.value,
+                10,
+              );
+            }}
+            type="number"
+            value={content.plainTextLines}
+          />
+        </div>
       </ProList>
     </>
   );

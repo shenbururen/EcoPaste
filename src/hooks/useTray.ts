@@ -57,12 +57,12 @@ export const useTray = () => {
 
     const menu = await getTrayMenu();
 
-    const iconPath = isMac ? "assets/tray-mac.ico" : "assets/tray.ico";
+    const iconPath = isMac() ? "assets/tray-mac.ico" : "assets/tray.ico";
     const icon = await resolveResource(iconPath);
 
     const options: TrayIconOptions = {
       action: (event) => {
-        if (isMac) return;
+        if (isMac()) return;
 
         if (event.type === "Click" && event.button === "Left") {
           showWindow("main");
@@ -72,7 +72,7 @@ export const useTray = () => {
       iconAsTemplate: true,
       id: TRAY_ID,
       menu,
-      menuOnLeftClick: isMac,
+      menuOnLeftClick: isMac(),
       tooltip: `${appName} v${appVersion}`,
     };
 
@@ -85,7 +85,7 @@ export const useTray = () => {
 
     const items = await Promise.all([
       MenuItem.new({
-        accelerator: isMac ? "Cmd+," : void 0,
+        accelerator: isMac() ? "Cmd+," : void 0,
         action: () => showWindow("preference"),
         text: t("component.tray.label.preference"),
       }),
@@ -118,7 +118,7 @@ export const useTray = () => {
         text: t("component.tray.label.relaunch"),
       }),
       MenuItem.new({
-        accelerator: isMac ? "Cmd+Q" : void 0,
+        accelerator: isMac() ? "Cmd+Q" : void 0,
         action: () => exit(0),
         text: t("component.tray.label.exit"),
       }),

@@ -29,7 +29,7 @@ const General = () => {
 
   return (
     <>
-      {isMac && <MacosPermissions />}
+      {isMac() && <MacosPermissions />}
 
       <ProList header={t("preference.settings.app_settings.title")}>
         <ProSwitch

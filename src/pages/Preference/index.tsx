@@ -111,7 +111,7 @@ const Preference = () => {
   return (
     <Flex className="h-screen">
       <Flex
-        className={clsx("h-full w-50 p-3", [isMac ? "pt-8" : "bg-color-1"])}
+        className={clsx("h-full w-50 p-3", [isMac() ? "pt-8" : "bg-color-1"])}
         data-tauri-drag-region
         gap="small"
         vertical

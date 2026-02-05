@@ -16,9 +16,9 @@ const StandardMode = () => {
   return (
     <Flex
       className={clsx("h-screen bg-color-1 py-3", {
-        "b b-color-1": isLinux,
+        "b b-color-1": isLinux(),
         "flex-col-reverse": search.position === "bottom",
-        "rounded-2.5": !isWin,
+        "rounded-2.5": !isWin(),
       })}
       data-tauri-drag-region
       gap={12}

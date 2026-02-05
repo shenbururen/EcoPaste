@@ -31,7 +31,7 @@ const File: FC<FileProps> = (props) => {
 
       Object.assign(state, data);
 
-      if (isLinux) return;
+      if (isLinux()) return;
 
       state.icon = await icon(path, { size: 256 });
     } catch {

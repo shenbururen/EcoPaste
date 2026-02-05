@@ -11,21 +11,21 @@ export interface Key {
 export const modifierKeys: Key[] = [
   {
     eventKey: "Shift",
-    symbol: isMac ? "⇧" : "Shift",
+    symbol: isMac() ? "⇧" : "Shift",
   },
   {
     eventKey: "Control",
     hookKey: "ctrl",
-    symbol: isMac ? "⌃" : "Ctrl",
+    symbol: isMac() ? "⌃" : "Ctrl",
   },
   {
     eventKey: "Alt",
-    symbol: isMac ? "⌥" : "Alt",
+    symbol: isMac() ? "⌥" : "Alt",
   },
   {
     eventKey: "Command",
     hookKey: "meta",
-    symbol: isMac ? "⌘" : "Super",
+    symbol: isMac() ? "⌘" : "Super",
   },
 ].map((item) => {
   const { eventKey } = item;
@@ -43,7 +43,7 @@ export const standardKeys: Key[] = [
   {
     eventKey: "Escape",
     hookKey: "esc",
-    symbol: isMac ? "⎋" : "Esc",
+    symbol: isMac() ? "⎋" : "Esc",
   },
   {
     eventKey: "F1",
@@ -130,12 +130,12 @@ export const standardKeys: Key[] = [
   },
   {
     eventKey: "Backspace",
-    symbol: isMac ? "⌫" : void 0,
+    symbol: isMac() ? "⌫" : void 0,
   },
   // 第三排
   {
     eventKey: "Tab",
-    symbol: isMac ? "⇥" : void 0,
+    symbol: isMac() ? "⇥" : void 0,
   },
   {
     eventKey: "KeyQ",
@@ -220,7 +220,7 @@ export const standardKeys: Key[] = [
   },
   {
     eventKey: "Enter",
-    symbol: isMac ? "↩︎" : void 0,
+    symbol: isMac() ? "↩︎" : void 0,
   },
   // 第五排
   {
@@ -260,7 +260,7 @@ export const standardKeys: Key[] = [
   // 第六排
   {
     eventKey: "Space",
-    symbol: isMac ? "␣" : void 0,
+    symbol: isMac() ? "␣" : void 0,
   },
   // 方向键
   {
@@ -286,7 +286,7 @@ export const standardKeys: Key[] = [
   // 功能键
   {
     eventKey: "Delete",
-    symbol: isMac ? "⌫" : void 0,
+    symbol: isMac() ? "⌫" : void 0,
   },
 ].map((item) => {
   const { eventKey } = item;

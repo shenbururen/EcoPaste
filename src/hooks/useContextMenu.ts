@@ -169,7 +169,7 @@ export const useContextMenu = (props: UseContextMenuProps) => {
       {
         action: openToFinder,
         hide: type !== "files" && subtype !== "path",
-        text: isMac
+        text: isMac()
           ? t("clipboard.button.context_menu.show_in_finder")
           : t("clipboard.button.context_menu.show_in_file_explorer"),
       },

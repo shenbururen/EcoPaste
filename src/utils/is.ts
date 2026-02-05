@@ -11,19 +11,30 @@ export const isDev = () => {
 };
 
 /**
+ * 获取当前平台
+ */
+const getPlatform = () => {
+  try {
+    return platform();
+  } catch {
+    return undefined;
+  }
+};
+
+/**
  * 是否为 macos 系统
  */
-export const isMac = platform() === "macos";
+export const isMac = () => getPlatform() === "macos";
 
 /**
  * 是否为 windows 系统
  */
-export const isWin = platform() === "windows";
+export const isWin = () => getPlatform() === "windows";
 
 /**
  * 是否为 linux 系统
  */
-export const isLinux = platform() === "linux";
+export const isLinux = () => getPlatform() === "linux";
 
 /**
  * 是否为链接

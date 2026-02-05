@@ -1,7 +1,11 @@
 import { invoke } from "@tauri-apps/api/core";
 import { emit } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { PhysicalPosition, PhysicalSize } from "@tauri-apps/api/window";
+import {
+  cursorPosition,
+  PhysicalPosition,
+  PhysicalSize,
+} from "@tauri-apps/api/window";
 import { LISTEN_KEY, WINDOW_LABEL } from "@/constants";
 import { clipboardStore } from "@/stores/clipboard";
 import type { WindowLabel } from "@/types/plugin";
@@ -40,7 +44,7 @@ export const toggleWindowVisible = async () => {
 
   let focused = await appWindow.isFocused();
 
-  if (isLinux) {
+  if (isLinux()) {
     focused = await appWindow.isVisible();
   }
 
@@ -60,13 +64,20 @@ export const toggleWindowVisible = async () => {
       const monitor = await getCursorMonitor();
 
       if (monitor) {
-        const { position, size, cursorPoint } = monitor;
+        const { position, size } = monitor;
         const { width, height } = await appWindow.innerSize();
+        const cursorPoint = await cursorPosition();
         let { x, y } = cursorPoint;
 
         if (window.position === "follow") {
-          x = Math.min(x, position.x + size.width - width);
-          y = Math.min(y, position.y + size.height - height);
+          x = Math.max(
+            position.x,
+            Math.min(x, position.x + size.width - width),
+          );
+          y = Math.max(
+            position.y,
+            Math.min(y, position.y + size.height - height),
+          );
         } else {
           x = position.x + (size.width - width) / 2;
           y = position.y + (size.height - height) / 2;

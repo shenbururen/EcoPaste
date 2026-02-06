@@ -8,11 +8,7 @@ import {
   startListening,
 } from "tauri-plugin-clipboard-x-api";
 import { fullName } from "tauri-plugin-fs-pro-api";
-import {
-  insertHistory,
-  selectHistory,
-  updateHistory,
-} from "@/database/history";
+import { insertHistory, updateHistory } from "@/database/history";
 import type { State } from "@/pages/Main";
 import { getClipboardTextSubtype } from "@/plugins/clipboard";
 import { clipboardStore } from "@/stores/clipboard";
@@ -74,10 +70,21 @@ export const useClipboard = (
         sqlData.value = JSON.stringify(value);
       }
 
-      const [matched] = await selectHistory((qb) => {
-        const { type, value } = sqlData;
+      // 检查是否已存在相同内容的记录
+      let matched: DatabaseSchemaHistory | undefined;
 
-        return qb.where("type", "=", type).where("value", "=", value);
+      // 首先在内存列表中查找，提高性能
+      matched = state.list.find((item) => {
+        if (item.type !== data.type) return false;
+
+        // 根据不同类型进行比较
+        if (item.type === "files") {
+          // 对于文件类型，比较文件路径数组
+          return JSON.stringify(item.value) === JSON.stringify(data.value);
+        } else {
+          // 对于其他类型，直接比较值
+          return item.value === data.value;
+        }
       });
 
       const visible = state.group === "all" || state.group === group;
@@ -87,10 +94,8 @@ export const useClipboard = (
         const { id } = matched;
         if (visible) {
           remove(state.list, { id });
-
           state.list.unshift({ ...data, id });
         }
-
         return updateHistory(id, { createTime });
       }
 

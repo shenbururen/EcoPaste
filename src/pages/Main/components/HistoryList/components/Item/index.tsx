@@ -135,7 +135,7 @@ const Item: FC<ItemProps> = (props) => {
   return (
     <Flex
       className={clsx(
-        "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-1.2 transition",
+        "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-0.6 transition",
         {
           "b-primary bg-primary-1": rootState.activeId === id,
           "bg-gray-100 dark:bg-gray-800/50":

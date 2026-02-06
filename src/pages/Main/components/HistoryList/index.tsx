@@ -81,17 +81,17 @@ const HistoryList = () => {
 
               switch (content.lineSpacing) {
                 case "compact":
-                  return "pt-1";
+                  return "pt-0.25";
                 case "comfortable":
-                  return "pt-2";
+                  return "pt-0.75";
                 case "moderate":
-                  return "pt-3";
+                  return "pt-1.5";
                 case "relaxed":
-                  return "pt-4";
+                  return "pt-2.25";
                 case "spacious":
-                  return "pt-5";
+                  return "pt-3.5";
                 default:
-                  return "pt-3";
+                  return "pt-1.5";
               }
             };
 

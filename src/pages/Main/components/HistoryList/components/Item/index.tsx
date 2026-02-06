@@ -2,7 +2,7 @@ import { openPath } from "@tauri-apps/plugin-opener";
 import { Flex } from "antd";
 import type { HookAPI } from "antd/es/modal/useModal";
 import clsx from "clsx";
-import { type FC, useContext } from "react";
+import { type FC, useContext, useState } from "react";
 import { Marker } from "react-mark.js";
 import { useSnapshot } from "valtio";
 import SafeHtml from "@/components/SafeHtml";
@@ -31,6 +31,7 @@ const Item: FC<ItemProps> = (props) => {
   const { id, type, note, value } = data;
   const { rootState } = useContext(MainContext);
   const { content } = useSnapshot(clipboardStore);
+  const [isTextExpanded, setIsTextExpanded] = useState(false);
 
   const handlePreview = () => {
     if (type !== "image") return;
@@ -80,21 +81,46 @@ const Item: FC<ItemProps> = (props) => {
 
   const handleClick = (type: typeof content.autoPaste) => {
     rootState.activeId = id;
+    handleTextExpand();
 
     if (content.autoPaste !== type) return;
 
     pasteToClipboard(data);
   };
 
+  const handleTextExpand = () => {
+    setIsTextExpanded(true);
+  };
+
+  const handleTextCollapse = () => {
+    setIsTextExpanded(false);
+  };
+
   const renderContent = () => {
     if (content.showOnlyPlainText) {
       // 只展示纯文本内容
-      return <Text {...data} subtype="plain" type="text" />;
+      return (
+        <Text
+          {...data}
+          isExpanded={isTextExpanded}
+          onCollapse={handleTextCollapse}
+          onExpand={handleTextExpand}
+          subtype="plain"
+          type="text"
+        />
+      );
     }
 
     switch (type) {
       case "text":
-        return <Text {...data} />;
+        return (
+          <Text
+            {...data}
+            isExpanded={isTextExpanded}
+            onCollapse={handleTextCollapse}
+            onExpand={handleTextExpand}
+          />
+        );
       case "rtf":
         return <Rtf {...data} />;
       case "html":
@@ -112,16 +138,23 @@ const Item: FC<ItemProps> = (props) => {
         "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-1.5 transition",
         {
           "b-primary bg-primary-1": rootState.activeId === id,
+          "bg-color-1/50": content.alternateBackground && index % 2 === 0,
         },
       )}
       gap={4}
       onClick={() => handleClick("single")}
       onContextMenu={handleContextMenu}
       onDoubleClick={() => handleClick("double")}
+      onMouseLeave={handleTextCollapse}
       vertical
     >
       {!content.hideHeaders && (
-        <Header {...rest} data={data} handleNote={handleNote} />
+        <Header
+          {...rest}
+          data={data}
+          handleNote={handleNote}
+          onHeaderClick={handleTextExpand}
+        />
       )}
 
       <div className="relative flex-1 select-auto overflow-visible break-words children:transition">

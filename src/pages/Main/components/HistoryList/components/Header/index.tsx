@@ -20,10 +20,11 @@ interface HeaderProps {
   handleNote: () => void;
   handleFavorite: () => void;
   handleDelete: () => void;
+  onHeaderClick: () => void;
 }
 
 const Header: FC<HeaderProps> = (props) => {
-  const { data } = props;
+  const { data, onHeaderClick } = props;
   const { id, type, value, count, createTime, favorite, subtype } = data;
   const { rootState } = useContext(MainContext);
   const { t, i18n } = useTranslation();
@@ -109,6 +110,7 @@ const Header: FC<HeaderProps> = (props) => {
       className="cursor-pointer text-color-2"
       gap="small"
       justify="space-between"
+      onClick={onHeaderClick}
     >
       <Scrollbar thumbSize={0}>
         <Flex className="flex-1 whitespace-nowrap text-xs" gap="small">

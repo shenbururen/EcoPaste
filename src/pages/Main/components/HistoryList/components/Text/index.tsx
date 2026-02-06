@@ -1,17 +1,22 @@
 import { Flex } from "antd";
 import clsx from "clsx";
-import { type CSSProperties, type FC, useContext, useState } from "react";
+import { type CSSProperties, type FC, useContext } from "react";
 import { Marker } from "react-mark.js";
 import { useSnapshot } from "valtio";
 import { MainContext } from "@/pages/Main";
 import { clipboardStore } from "@/stores/clipboard";
 import type { DatabaseSchemaHistory } from "@/types/database";
 
-const Text: FC<DatabaseSchemaHistory<"text">> = (props) => {
-  const { value, subtype } = props;
+interface TextProps extends DatabaseSchemaHistory<"text"> {
+  isExpanded: boolean;
+  onExpand: () => void;
+  onCollapse: () => void;
+}
+
+const Text: FC<TextProps> = (props) => {
+  const { value, subtype, isExpanded, onExpand, onCollapse } = props;
   const { rootState } = useContext(MainContext);
   const { content } = useSnapshot(clipboardStore);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const renderMarker = () => {
     return <Marker mark={rootState.search}>{value}</Marker>;
@@ -58,11 +63,9 @@ const Text: FC<DatabaseSchemaHistory<"text">> = (props) => {
   };
 
   return (
-    <div className="relative" onMouseLeave={() => setIsExpanded(false)}>
+    <div className="relative" onClick={onExpand} onMouseLeave={onCollapse}>
       {/* 原始文本 */}
-      <div onClick={() => setIsExpanded(true)} style={getLineClampStyle()}>
-        {renderContent()}
-      </div>
+      <div style={getLineClampStyle()}>{renderContent()}</div>
 
       {/* 展开的文本（向下延伸） */}
       {isExpanded && (

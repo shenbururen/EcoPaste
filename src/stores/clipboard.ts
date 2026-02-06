@@ -9,10 +9,10 @@ export const clipboardStore = proxy<ClipboardStore>({
   content: {
     autoFavorite: false,
     autoPaste: "double",
-    autoSort: false,
-    copyPlain: false,
+    autoSort: true,
+    copyPlain: true,
     deleteConfirm: true,
-    hideHeaders: false,
+    hideHeaders: true,
     operationButtons: ["copy", "star", "delete"],
     pastePlain: false,
     plainTextLines: 3,
@@ -27,13 +27,13 @@ export const clipboardStore = proxy<ClipboardStore>({
   },
 
   search: {
-    autoClear: false,
-    defaultFocus: false,
+    autoClear: true,
+    defaultFocus: true,
     position: "top",
   },
   window: {
-    backTop: false,
-    position: "remember",
+    backTop: true,
+    position: "follow",
     showAll: false,
     style: "standard",
   },

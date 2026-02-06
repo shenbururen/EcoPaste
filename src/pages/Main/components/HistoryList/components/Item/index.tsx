@@ -31,7 +31,7 @@ const Item: FC<ItemProps> = (props) => {
   const { id, type, note, value } = data;
   const { rootState } = useContext(MainContext);
   const { content } = useSnapshot(clipboardStore);
-  const [isTextExpanded, setIsTextExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handlePreview = () => {
     if (type !== "image") return;
@@ -81,19 +81,19 @@ const Item: FC<ItemProps> = (props) => {
 
   const handleClick = (type: typeof content.autoPaste) => {
     rootState.activeId = id;
-    handleTextExpand();
+    handleExpand();
 
     if (content.autoPaste !== type) return;
 
     pasteToClipboard(data);
   };
 
-  const handleTextExpand = () => {
-    setIsTextExpanded(true);
+  const handleExpand = () => {
+    setIsExpanded(true);
   };
 
-  const handleTextCollapse = () => {
-    setIsTextExpanded(false);
+  const handleCollapse = () => {
+    setIsExpanded(false);
   };
 
   const renderContent = () => {
@@ -102,9 +102,9 @@ const Item: FC<ItemProps> = (props) => {
       return (
         <Text
           {...data}
-          isExpanded={isTextExpanded}
-          onCollapse={handleTextCollapse}
-          onExpand={handleTextExpand}
+          isExpanded={false}
+          onCollapse={handleCollapse}
+          onExpand={handleExpand}
           subtype="plain"
           type="text"
         />
@@ -116,9 +116,9 @@ const Item: FC<ItemProps> = (props) => {
         return (
           <Text
             {...data}
-            isExpanded={isTextExpanded}
-            onCollapse={handleTextCollapse}
-            onExpand={handleTextExpand}
+            isExpanded={false}
+            onCollapse={handleCollapse}
+            onExpand={handleExpand}
           />
         );
       case "rtf":
@@ -132,60 +132,116 @@ const Item: FC<ItemProps> = (props) => {
     }
   };
 
+  const renderExpandedContent = () => {
+    switch (type) {
+      case "text":
+        return (
+          <div
+            style={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 5,
+            }}
+          >
+            <Text
+              {...data}
+              isExpanded={true}
+              onCollapse={handleCollapse}
+              onExpand={handleExpand}
+            />
+          </div>
+        );
+      case "image":
+        return <Image {...data} />;
+      case "files":
+        return (
+          <div>
+            {value.map((path: string) => {
+              return (
+                <div className="mb-1 last:mb-0" key={path}>
+                  <span>File: {path}</span>
+                  {data.count && (
+                    <span className="ml-2 text-color-2 text-sm">
+                      ({(data.count / (1024 * 1024)).toFixed(2)} MB)
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      case "rtf":
+        return <Rtf {...data} />;
+      case "html":
+        return <SafeHtml {...data} />;
+    }
+  };
+
   return (
-    <Flex
-      className={clsx(
-        "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-0.6 transition",
-        {
-          "b-primary bg-primary-1": rootState.activeId === id,
-          "bg-gray-100 dark:bg-gray-800/50":
-            content.alternateBackground && index % 2 === 0,
-        },
-      )}
-      gap={4}
-      onClick={() => handleClick("single")}
-      onContextMenu={handleContextMenu}
-      onDoubleClick={() => handleClick("double")}
-      onMouseLeave={handleTextCollapse}
-      vertical
-    >
-      {!content.hideHeaders && (
-        <Header
-          {...rest}
-          data={data}
-          handleNote={handleNote}
-          onHeaderClick={handleTextExpand}
-        />
-      )}
-
-      <div className="relative flex-1 select-auto overflow-visible break-words children:transition">
-        <div
-          className={clsx(
-            "pointer-events-none absolute inset-0 line-clamp-4 children:inline opacity-0",
-            {
-              "group-hover:opacity-0": content.showOriginalContent,
-              "opacity-100": note,
-            },
-          )}
-        >
-          <UnoIcon
-            className="mr-0.5 translate-y-0.5"
-            name="i-hugeicons:task-edit-01"
+    <div className="relative">
+      <Flex
+        className={clsx(
+          "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-0.6 transition",
+          {
+            "b-primary bg-primary-1": rootState.activeId === id,
+            "bg-gray-100 dark:bg-gray-800/50":
+              content.alternateBackground && index % 2 === 0,
+          },
+        )}
+        gap={4}
+        onClick={() => handleClick("single")}
+        onContextMenu={handleContextMenu}
+        onDoubleClick={() => handleClick("double")}
+        onMouseLeave={handleCollapse}
+        vertical
+      >
+        {!content.hideHeaders && (
+          <Header
+            {...rest}
+            data={data}
+            handleNote={handleNote}
+            onHeaderClick={handleExpand}
           />
+        )}
 
-          <Marker mark={rootState.search}>{note}</Marker>
-        </div>
+        <div className="relative flex-1 select-auto overflow-visible break-words children:transition">
+          <div
+            className={clsx(
+              "pointer-events-none absolute inset-0 line-clamp-4 children:inline opacity-0",
+              {
+                "group-hover:opacity-0": content.showOriginalContent,
+                "opacity-100": note,
+              },
+            )}
+          >
+            <UnoIcon
+              className="mr-0.5 translate-y-0.5"
+              name="i-hugeicons:task-edit-01"
+            />
 
-        <div
-          className={clsx("h-full", {
-            "group-hover:opacity-100": content.showOriginalContent,
-            "opacity-0": note,
-          })}
-        >
-          {renderContent()}
+            <Marker mark={rootState.search}>{note}</Marker>
+          </div>
+
+          <div
+            className={clsx("h-full", {
+              "group-hover:opacity-100": content.showOriginalContent,
+              "opacity-0": note,
+            })}
+          >
+            {renderContent()}
+          </div>
         </div>
-      </div>
-    </Flex>
+      </Flex>
+
+      {/* 展开的原始内容（向下延伸） */}
+      {isExpanded && (
+        <div className="absolute top-full right-0 left-0 z-50 mt-1 rounded-md border border-border-1 bg-color-1 p-2 shadow-lg">
+          {renderExpandedContent()}
+        </div>
+      )}
+    </div>
   );
 };
 

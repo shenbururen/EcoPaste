@@ -97,7 +97,13 @@ const Item: FC<ItemProps> = (props) => {
   };
 
   const renderContent = () => {
-    if (content.showOnlyPlainText) {
+    // 当切换到图片和文件标签时，让"只展示纯文本"设置失效
+    const shouldShowOnlyPlainText =
+      content.showOnlyPlainText &&
+      rootState.group !== "image" &&
+      rootState.group !== "files";
+
+    if (shouldShowOnlyPlainText) {
       // 只展示纯文本内容
       return (
         <Text

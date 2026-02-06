@@ -138,7 +138,8 @@ const Item: FC<ItemProps> = (props) => {
         "group b hover:b-primary-5 b-color-2 mx-3 rounded-md p-1.2 transition",
         {
           "b-primary bg-primary-1": rootState.activeId === id,
-          "bg-color-1/50": content.alternateBackground && index % 2 === 0,
+          "bg-gray-100 dark:bg-gray-800/50":
+            content.alternateBackground && index % 2 === 0,
         },
       )}
       gap={4}

@@ -5,7 +5,7 @@ import ProListItem from "../ProListItem";
 
 export type ProSelectProps<T> = SelectProps<T> & ListItemMetaProps;
 
-const SettingSelect = <T,>(props: ProSelectProps<T>) => {
+const ProSelect = <T,>(props: ProSelectProps<T>) => {
   const { title, description, children, ...rest } = props;
 
   return (
@@ -17,4 +17,4 @@ const SettingSelect = <T,>(props: ProSelectProps<T>) => {
   );
 };
 
-export default SettingSelect;
+export default ProSelect;

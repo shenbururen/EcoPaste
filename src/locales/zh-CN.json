@@ -128,6 +128,7 @@
           "hide_headers": "隐藏剪切板列表每项上面的标头（纯文本、字符数、分钟）",
           "operation_button": "自定义操作剪贴板内容的图标按钮",
           "paste_as_plain": "富文本和HTML格式在粘贴时仅保留纯文本内容",
+          "plain_text_lines": "设置剪贴板列表中纯文本的默认展示行数",
           "show_only_plain_text": "只展示纯文本内容，隐藏其他格式",
           "show_original_content": "添加备注后，鼠标悬停时是否显示原内容"
         },

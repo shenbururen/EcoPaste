@@ -1,7 +1,7 @@
-import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { useSnapshot } from "valtio";
 import ProList from "@/components/ProList";
+import ProSelect from "@/components/ProSelect";
 import ProSwitch from "@/components/ProSwitch";
 import { clipboardStore } from "@/stores/clipboard";
 import AudioSettings from "./components/AudioSettings";
@@ -13,7 +13,6 @@ import WindowPosition from "./components/WindowPosition";
 const ClipboardSettings = () => {
   const { window, search, content } = useSnapshot(clipboardStore);
   const { t } = useTranslation();
-  const plainTextLinesId = useId();
 
   return (
     <>
@@ -169,25 +168,25 @@ const ClipboardSettings = () => {
           value={content.hideHeaders}
         />
 
-        <div className="mt-2 mb-2">
-          <label className="mb-1 block text-color-2" htmlFor={plainTextLinesId}>
-            {t("preference.clipboard.content_settings.label.plain_text_lines")}
-          </label>
-          <input
-            className="w-full rounded-md bg-color-1 p-2 text-color-1"
-            id={plainTextLinesId}
-            max="10"
-            min="1"
-            onChange={(e) => {
-              clipboardStore.content.plainTextLines = parseInt(
-                e.target.value,
-                10,
-              );
-            }}
-            type="number"
-            value={content.plainTextLines}
-          />
-        </div>
+        <ProSelect
+          description={t(
+            "preference.clipboard.content_settings.hints.plain_text_lines",
+          )}
+          onChange={(value) => {
+            clipboardStore.content.plainTextLines = value;
+          }}
+          options={[
+            { label: "1", value: 1 },
+            { label: "2", value: 2 },
+            { label: "3", value: 3 },
+            { label: "4", value: 4 },
+            { label: "5", value: 5 },
+          ]}
+          title={t(
+            "preference.clipboard.content_settings.label.plain_text_lines",
+          )}
+          value={content.plainTextLines}
+        />
       </ProList>
     </>
   );

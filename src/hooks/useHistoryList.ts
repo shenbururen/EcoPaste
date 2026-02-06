@@ -32,21 +32,22 @@ export const useHistoryList = (options: Options) => {
       state.loading = true;
 
       const { page } = state;
+      const currentGroup = rootState.group;
+      const currentSearch = rootState.search;
 
       const list = await selectHistory((qb) => {
         const { size } = state;
-        const { group, search } = rootState;
-        const isFavoriteGroup = group === "favorite";
-        const isNormalGroup = group !== "all" && !isFavoriteGroup;
+        const isFavoriteGroup = currentGroup === "favorite";
+        const isNormalGroup = currentGroup !== "all" && !isFavoriteGroup;
 
         return qb
           .$if(isFavoriteGroup, (eb) => eb.where("favorite", "=", true))
-          .$if(isNormalGroup, (eb) => eb.where("group", "=", group))
-          .$if(!isBlank(search), (eb) => {
+          .$if(isNormalGroup, (eb) => eb.where("group", "=", currentGroup))
+          .$if(!isBlank(currentSearch), (eb) => {
             return eb.where((eb) => {
               return eb.or([
-                eb("search", "like", eb.val(`%${search}%`)),
-                eb("note", "like", eb.val(`%${search}%`)),
+                eb("search", "like", eb.val(`%${currentSearch}%`)),
+                eb("note", "like", eb.val(`%${currentSearch}%`)),
               ]);
             });
           })
@@ -95,9 +96,12 @@ export const useHistoryList = (options: Options) => {
   };
 
   const reload = () => {
+    // 重置状态，确保从第一页开始加载
     state.page = 1;
     state.noMore = false;
+    state.loading = false;
 
+    // 立即返回fetchData的结果
     return fetchData();
   };
 
@@ -114,7 +118,12 @@ export const useHistoryList = (options: Options) => {
   useAsyncEffect(async () => {
     await reload();
 
-    rootState.activeId = rootState.list[0]?.id;
+    // 确保activeId总是指向列表中的有效项目
+    if (rootState.list.length > 0) {
+      rootState.activeId = rootState.list[0].id;
+    } else {
+      rootState.activeId = undefined;
+    }
   }, [rootState.group, rootState.search]);
 
   return {

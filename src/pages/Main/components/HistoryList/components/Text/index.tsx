@@ -2,7 +2,9 @@ import { Flex } from "antd";
 import clsx from "clsx";
 import { type CSSProperties, type FC, useContext } from "react";
 import { Marker } from "react-mark.js";
+import { useSnapshot } from "valtio";
 import { MainContext } from "@/pages/Main";
+import { clipboardStore } from "@/stores/clipboard";
 import type { DatabaseSchemaHistory } from "@/types/database";
 
 interface TextProps extends DatabaseSchemaHistory<"text"> {
@@ -14,6 +16,7 @@ interface TextProps extends DatabaseSchemaHistory<"text"> {
 const Text: FC<TextProps> = (props) => {
   const { value, subtype, isExpanded } = props;
   const { rootState } = useContext(MainContext);
+  const { content } = useSnapshot(clipboardStore);
 
   const renderMarker = () => {
     return <Marker mark={rootState.search}>{value}</Marker>;
@@ -58,7 +61,7 @@ const Text: FC<TextProps> = (props) => {
       overflow: "hidden",
       textOverflow: "ellipsis",
       WebkitBoxOrient: "vertical",
-      WebkitLineClamp: 1,
+      WebkitLineClamp: content.plainTextLines,
     };
   };
 

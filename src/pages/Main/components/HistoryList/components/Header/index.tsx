@@ -105,7 +105,11 @@ const Header: FC<HeaderProps> = (props) => {
   };
 
   return (
-    <Flex className="text-color-2" gap="small" justify="space-between">
+    <Flex
+      className="cursor-pointer text-color-2"
+      gap="small"
+      justify="space-between"
+    >
       <Scrollbar thumbSize={0}>
         <Flex className="flex-1 whitespace-nowrap text-xs" gap="small">
           <span>{renderType()}</span>

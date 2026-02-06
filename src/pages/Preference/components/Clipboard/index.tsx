@@ -187,6 +187,62 @@ const ClipboardSettings = () => {
           )}
           value={content.plainTextLines}
         />
+
+        <ProSelect
+          description={t(
+            "preference.clipboard.content_settings.hints.line_spacing",
+          )}
+          onChange={(value) => {
+            clipboardStore.content.lineSpacing = value;
+          }}
+          options={[
+            {
+              label: t(
+                "preference.clipboard.content_settings.label.line_spacing_option.compact",
+              ),
+              value: "compact",
+            },
+            {
+              label: t(
+                "preference.clipboard.content_settings.label.line_spacing_option.comfortable",
+              ),
+              value: "comfortable",
+            },
+            {
+              label: t(
+                "preference.clipboard.content_settings.label.line_spacing_option.moderate",
+              ),
+              value: "moderate",
+            },
+            {
+              label: t(
+                "preference.clipboard.content_settings.label.line_spacing_option.relaxed",
+              ),
+              value: "relaxed",
+            },
+            {
+              label: t(
+                "preference.clipboard.content_settings.label.line_spacing_option.spacious",
+              ),
+              value: "spacious",
+            },
+          ]}
+          title={t("preference.clipboard.content_settings.label.line_spacing")}
+          value={content.lineSpacing}
+        />
+
+        <ProSwitch
+          description={t(
+            "preference.clipboard.content_settings.hints.alternate_background",
+          )}
+          onChange={(value) => {
+            clipboardStore.content.alternateBackground = value;
+          }}
+          title={t(
+            "preference.clipboard.content_settings.label.alternate_background",
+          )}
+          value={content.alternateBackground}
+        />
       </ProList>
     </>
   );

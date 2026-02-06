@@ -1,20 +1,22 @@
 import { useUpdateEffect } from "ahooks";
 import { FloatButton, Modal } from "antd";
-import clsx from "clsx";
 import { findIndex } from "es-toolkit/compat";
 import { useContext, useEffect, useRef } from "react";
 import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { useSnapshot } from "valtio";
 import Scrollbar from "@/components/Scrollbar";
 import { LISTEN_KEY } from "@/constants";
 import { useHistoryList } from "@/hooks/useHistoryList";
 import { useKeyboard } from "@/hooks/useKeyboard";
 import { useTauriListen } from "@/hooks/useTauriListen";
+import { clipboardStore } from "@/stores/clipboard";
 import { MainContext } from "../..";
 import Item from "./components/Item";
 import NoteModal, { type NoteModalRef } from "./components/NoteModal";
 
 const HistoryList = () => {
   const { rootState } = useContext(MainContext);
+  const { content } = useSnapshot(clipboardStore);
   const noteModelRef = useRef<NoteModalRef>(null);
   const [deleteModal, contextHolder] = Modal.useModal();
   const virtuosoRef = useRef<VirtuosoHandle>(null);
@@ -74,8 +76,27 @@ const HistoryList = () => {
           data={rootState.list}
           endReached={loadMore}
           itemContent={(index, data) => {
+            const getLineSpacingClass = () => {
+              if (index === 0) return "";
+
+              switch (content.lineSpacing) {
+                case "compact":
+                  return "pt-1";
+                case "comfortable":
+                  return "pt-2";
+                case "moderate":
+                  return "pt-3";
+                case "relaxed":
+                  return "pt-4";
+                case "spacious":
+                  return "pt-5";
+                default:
+                  return "pt-3";
+              }
+            };
+
             return (
-              <div className={clsx({ "pt-3": index !== 0 })}>
+              <div className={getLineSpacingClass()}>
                 <Item
                   data={data}
                   deleteModal={deleteModal}

@@ -7,12 +7,14 @@ export const clipboardStore = proxy<ClipboardStore>({
   },
 
   content: {
+    alternateBackground: true,
     autoFavorite: false,
     autoPaste: "double",
     autoSort: true,
     copyPlain: true,
     deleteConfirm: true,
     hideHeaders: true,
+    lineSpacing: "moderate",
     operationButtons: ["copy", "star", "delete"],
     pastePlain: false,
     plainTextLines: 3,

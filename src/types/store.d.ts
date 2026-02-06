@@ -93,6 +93,13 @@ export interface ClipboardStore {
     showOnlyPlainText: boolean;
     plainTextLines: number;
     hideHeaders: boolean;
+    lineSpacing:
+      | "compact"
+      | "comfortable"
+      | "moderate"
+      | "relaxed"
+      | "spacious";
+    alternateBackground: boolean;
   };
 
   // 历史记录

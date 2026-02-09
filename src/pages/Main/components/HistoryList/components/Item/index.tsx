@@ -149,6 +149,8 @@ const Item: FC<ItemProps> = (props) => {
               textOverflow: "ellipsis",
               WebkitBoxOrient: "vertical",
               WebkitLineClamp: 5,
+              wordBreak: "break-all",
+              wordWrap: "break-word",
             }}
           >
             <Text
